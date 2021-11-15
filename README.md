@@ -98,7 +98,8 @@ php bin/swoole.php start
 ```
 
 
-### 入口文件
+## 入口文件
+
 骨架路径 `public/index.php`
 ```php
 <?php
@@ -120,7 +121,7 @@ Error::register();
 return Vega::new()->run();
 ```
 
-### 部署
+## 部署
 
 和 Laravel、ThinkPHP 部署方法完全一致，将 `public/index.php` 在 `nginx` 配置 `rewrite` 重写即可
 
