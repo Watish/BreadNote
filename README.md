@@ -2,14 +2,14 @@
 
 ## 简介
 BreadNote是一款在线轻量笔记编辑平台，在浏览器访问即可使用不需要本地安装，方便快捷。
-#
+
 ## 技术栈
  `MixPHP`  `React` `Mysql`
 #### 后端
 由PHP编写，使用高性能的MixPHP框架提供restful规范的接口
 #### 前端
 由React编写，使用Ant Design，简约大气
-#
+
 
 
 
@@ -43,7 +43,7 @@ JWT_KEY=my_secret_key
 
 ```
 
-#
+
 ## 快速开始
 
 启动 PHP-FPM 开发服务
@@ -98,9 +98,6 @@ php bin/swoole.php start
 ```
 
 
-#
-
-
 ### 入口文件
 骨架路径 `public/index.php`
 ```php
@@ -150,5 +147,5 @@ server {
 }
 ```
 
-#
+
 
