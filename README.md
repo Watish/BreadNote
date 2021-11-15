@@ -9,7 +9,7 @@ BreadNote是一款在线轻量笔记编辑平台，在浏览器访问即可使�
 ## 技术栈
  `MixPHP`  `React` `Mysql`
 #### 后端
-由PHP编写，使用高性能的MixPHP框架提供restful规范的接口
+由PHP编写，使用高性能的[MixPHP](https://github.com/mix-php/mix)框架提供restful规范的接口
 #### 前端
 由React编写，使用Ant Design，简约大气
 
