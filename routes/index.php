@@ -7,6 +7,8 @@ use App\Controller\Notebook;
 use App\Controller\Base;
 use App\Controller\Note;
 use App\Controller\Tag;
+use App\Controller\Upload;
+use App\Controller\Cache;
 
 return function (Mix\Vega\Engine $vega) {
     $vega->handle('/hello', [new Hello(), 'index'])->methods('GET');
@@ -42,5 +44,6 @@ return function (Mix\Vega\Engine $vega) {
     $vega->handle('/api/tag/getSyncTags', [new Tag(), 'getSyncTags'])->methods('GET','POST');
     $vega->handle('/api/tag/deleteTag', [new Tag(), 'deleteTag'])->methods('GET','POST');
     
-
+    $vega->handle('/api/file/uploadAttach', [new Upload(), 'uploadAttach'])->methods('GET','POST');
+    
 };
