@@ -1,0 +1,7 @@
+        $mycache = new Cache('Hello World');
+        if($mycache->exists and !$mycache->expired){
+            $data = $mycache->value;
+            $ctx->JSONP(200,$data);
+        }else{
+            $mycache->Set('这是缓存里的数据',10);
+        }

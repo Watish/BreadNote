@@ -10,7 +10,7 @@ class Base{
     public $ctx;
     public $token;
     
-    public function get_query($string) {
+    public function get_query($string) { //获取url参数
         $ctx = $this->ctx;
         if (empty($string)) {
             return false;
@@ -27,13 +27,13 @@ class Base{
         return false;
     }
 
-    public function error($str = "失败") {
+    public function error($str = "失败") { //自定义返回异常
         $array['Ok'] = false;
         $array['Msg'] = $str;
         $this->ctx->JSONP(200, $array);
         $this->ctx->abort();
     }
-    public function new_token() {
+    public function new_token() { //新建一个token
         $array = 'q.w.e.r.t.y.u.i.o.p.a.s.d.f.g.h.j.k.l.z.x.c.v.b.n.m.0.1.2.3.4.5.6.7.8.9';
         $array = explode('.', $array);
         $num = count($array);
@@ -48,19 +48,29 @@ class Base{
         }
         return $res.date("ymdhis");
     }
-    public function check_logined($token) {
+    public function check_logined($token) {//判断是否登录
+        $token_cache = new Cache($token);
+        if($token_cache->exists and !$token_cache->expired){
+            if($token_cache->value){
+                return true;
+            }
+        }
+        if(!$this->istoken($token)){
+            return false;
+        }
         $array = DB::instance()->table('User_Pool')-> where('token = ?', addslashes($token))->first();
         if (isset($array->user)) {
+            $token_cache->Set(true);
             return true;
         } else {
             return false;
         }
     }
-    public function get_userid($token) {
+    public function get_userid($token) {//通过token获取用户id
         $array = DB::instance()->table('User_Pool')->where('token = ?', $token)->first();
         return $array->id;
     }
-    public function strsafe($str) {
+    public function strsafe($str) {//使用正则判断字符串是否含有非法字符
         $pattern = "#['!`~\/\\\%^&*()+=\$\#:;<>\]\[{}]#";
         if (preg_match($pattern, $str)) {
             return false;
@@ -68,7 +78,7 @@ class Base{
             return true;
         }
     }
-    public function istoken($str) {
+    public function istoken($str) {//使用正则判断是否为token
         $ereg = '/^[[:alnum:]]{25}$/';
         //$str='a!@#$%^';
         $num = preg_match($ereg, $str);
@@ -79,7 +89,7 @@ class Base{
             return true;
         }
     }
-    public function isdate($str){
+    public function isdate($str){//使用正则判断是否为指定格式的日期
         $ereg = '/^[0-9]{4}(-[0-9]{2}){2}.[0-9]{2}(:[0-9]{2}){2}$/';
         //$str='a!@#$%^';
         $num = preg_match($ereg, $str);
@@ -90,11 +100,11 @@ class Base{
                 return true;
         }
     }
-    /***100000 2000 3000  
-     * 笔记id 笔记本id 标签id
-     * 
-     * lastsysnctime = time()
-    ***/
+    
+    /***
+     * usn功能尚未开发
+     ***/
+    
     public function isusn($usn) {
         /***
         if (!isset($usn) or empty($usn)) {
@@ -208,49 +218,49 @@ class Base{
         return $this->updateusn($new_usn,$token);
         ***/
     }
-    public function check_notebook_exist($title,$token){
+    public function check_notebook_exist($title,$token){//通过笔记本名称判断笔记本是否存在
         
-        $userid = $this->get_userid($token);
+        $userid = $this->get_userid($token);//通过token过去用户id
         $tb_name = 'User_'.$userid.'_Notebooks';
-        $array = DB::instance()->table($tb_name)->where('title = ?',addslashes($title))->first();
-        if(isset($array->title) and isset($array->uuid)){
+        $array = DB::instance()->table($tb_name)->where('title = ?',addslashes($title))->first();//查询用户笔记本数据表
+        if(isset($array->title) and isset($array->uuid)){//判断指定笔记本是否存在
             return true;
         }
         return false;
     }
-    public function check_notebookid_exist($id,$token){
+    public function check_notebookid_exist($id,$token){//通过笔记本id判断笔记本是否存在
         
-        if(!$this->istoken($id)){
+        if(!$this->istoken($id)){//判断id是否非法
             return false;
         }
-        $userid = $this->get_userid($token);
+        $userid = $this->get_userid($token);//通过token获取用户id
         $tb_name = 'User_'.$userid.'_Notebooks';
-        $array = DB::instance()->table($tb_name)->where('uuid = ?',$id)->first();
-        if(isset($array->title) and isset($array->uuid)){
+        $array = DB::instance()->table($tb_name)->where('uuid = ?',$id)->first();//查询用户笔记本数据表
+        if(isset($array->title) and isset($array->uuid)){//判断指定笔记本是否存在
             return true;
         }
         return false;
     }
-    public function check_noteid_exist($id,$token){
+    public function check_noteid_exist($id,$token){//通过笔记id判断笔记本是否存在
         
-        if(!$this->istoken($id)){
+        if(!$this->istoken($id)){//判断id是否非法
             return false;
         }
-        $userid = $this->get_userid($token);
+        $userid = $this->get_userid($token);//通过token获取用户id
         $tb_name = 'User_'.$userid.'_Notes';
-        $array = DB::instance()->table($tb_name)->where('uuid = ?',$id)->first();
-        if(isset($array->title) and isset($array->uuid)){
+        $array = DB::instance()->table($tb_name)->where('uuid = ?',$id)->first();//查询用户笔记数据表
+        if(isset($array->title) and isset($array->uuid)){//判断指定笔记是否存在
             return true;
         }
         return false;
     }
-    public function firstload(Context $ctx){
+    public function firstload(Context $ctx){//笔记，笔记本，标签类统一初始化方法
         $this->ctx = $ctx;
         
-        if(!$this->check_logined($this->get_query('token'))){
+        if(!$this->check_logined($this->get_query('token'))){//判断是否登录
             $this->error('token错误');
         }
         $token = $this->get_query('token');
-        $this->token = $token;
+        $this->token = $token;//传递局部变量
     }
 }
