@@ -59,7 +59,7 @@ php bin/swoole.php start
 ## 使用Docker部署
 需要先部署一个MySQL容器，或者已安装好MySQL数据库
 ```
-docker run --name garbage -d -p 80:80 -v /path/to/config.json:/app/conf/config.json -v /tmp/garbage/:/app/cahce/ --restart=always watish/garbage:v2
+docker run --name breadnote -d -p 80:80 -v /path/to/config.json:/app/conf/config.json -v /tmp/garbage/:/app/cahce/ --restart=always watish/breadnote:v2
 ```
 
 ### 配置文件映射
