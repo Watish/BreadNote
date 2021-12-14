@@ -14,7 +14,7 @@ BreadNote是一款在线轻量笔记编辑平台，在浏览器访问即可使�
 
 ## 预览图
 
-![avatar](/public/static/media/shortcut.png)
+![avatar](/storage/shortcut.png)
 
 
 ## 安装
