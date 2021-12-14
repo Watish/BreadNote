@@ -1,0 +1,20 @@
+FROM phpswoole/swoole:4.8.3-php7.4-alpine
+
+LABEL maintainer="watish<watish@qq.com>"
+
+# 设定工作目录
+WORKDIR /app
+
+# 将当前目录下所有文件拷贝到/app
+COPY . /app
+
+# 修改文件目录权限
+# 替换apache配置文件
+RUN chmod -R 777 /app 
+
+# 暴露端口
+EXPOSE 80
+
+
+# 执行启动命令
+CMD ["php","/app/bin/swoole.php"]
